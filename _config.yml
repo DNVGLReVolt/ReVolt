@@ -10,7 +10,7 @@ description: ReVolt demonstration platform
 # List of links in the navigation bar
 navbar-links:
   Resources:
-    - ReVolt: A new inspirational ship concept: "https://www.dnvgl.com/technology-innovation/revolt/"
+    - ReVolt: "https://www.dnvgl.com/technology-innovation/revolt/"
   Home: "dnvglrevolt.github.io"
 
 avatar: "dnvglrevolt.github.io/img/ReVoltSquare.png"
