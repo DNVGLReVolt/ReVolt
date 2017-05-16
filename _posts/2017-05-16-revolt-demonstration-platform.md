@@ -2,7 +2,7 @@
 layout: post
 title: ReVolt
 subtitle: Demonstration Platform
-image: /img/ReVolt.JPG
+bigimg: /img/ReVolt.JPG
 tags: [ReVolt, NTNU, student work, coefficients]
 
 ---
