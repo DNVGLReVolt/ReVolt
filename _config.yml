@@ -23,8 +23,8 @@ avatar: "/img/ReVoltSquare.png"
 # Change all these values or delete the ones you don't want.
 # Important: you must keep the "name" parameter, everything else you can remove
 author:
-  name: Tom Arne Pedersen
-  email: "tom.arne.pedersen@dnvgl.com"
+  name: DNV GL
+#  email: "tom.arne.pedersen@dnvgl.com"
 
 
 
