@@ -4,6 +4,7 @@ title: ReVolt
 subtitle: Demonstration Platform
 bigimg: /img/ReVolt.jpg
 tags: [ReVolt, NTNU, student work, coefficients]
+avatar: /img/ReVoltSquare.png
 
 ---
 
