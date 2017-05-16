@@ -13,7 +13,7 @@ navbar-links:
     - ReVolt: "https://www.dnvgl.com/technology-innovation/revolt/"
   Home: "dnvglrevolt.github.io"
 
-avatar: "dnvglrevolt.github.io/img/ReVoltSquare.png"
+avatar: "/img/ReVoltSquare.png"
 
 
 
