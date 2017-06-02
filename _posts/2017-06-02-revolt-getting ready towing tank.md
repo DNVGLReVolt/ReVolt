@@ -2,7 +2,7 @@
 layout: post
 title: ReVolt
 subtitle: Towing Tank
-bigimg: /img/motorsTachosReVolt.jpg
+bigimg: /img/motorsTachosReVolt.png
 tags: [ReVolt, NTNU, SINTEF, student work, coefficients]
 avatar: /img/ReVoltSquare.png
 
