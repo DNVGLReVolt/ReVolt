@@ -16,5 +16,5 @@ Several tests will be performed:
 - Bollard pull tests with the stern thrusters with different speed and thrust direction commands
 - Bollard pull test with the bow thruster with different speed and thrust direction commands
 
-Thanks to NTNU and Sintef for helping us out with this.
+Thanks to NTNU and SINTEF for helping us out with this.
 
