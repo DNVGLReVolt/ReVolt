@@ -1,0 +1,17 @@
+---
+layout: post
+title: ReVolt
+subtitle: Towing Tank
+bigimg: /img/ReVoltTowingTank.png
+tags: [ReVolt, NTNU, SINTEF, student work, coefficients]
+avatar: /img/ReVoltSquare.png
+
+---
+
+The ReVolt model has been tested in the towing tankt at SINTF Ocean. Terje Rosten did a very nice job with preparing ReVolt for the test, and he also performed the test together with summerstudents at DNV GL GTR.
+The raw data from the test is published here: https://github.com/DNVGLReVolt/dnvglrevolt.github.io/tree/master/towingtankResults
+
+
+
+Thanks to NTNU and SINTEF for helping us out with this.
+
