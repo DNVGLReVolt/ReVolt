@@ -12,7 +12,7 @@ The ReVolt model has been tested in the towing tankt at SINTF Ocean. Terje Roste
 The raw data from the test is published here: 
 
 
-<li><a href="https://github.com/DNVGLReVolt/dnvglrevolt.github.io/tree/master/towingtankResults"" style="color: #000000">Results</a></li>
+<a href="https://github.com/DNVGLReVolt/dnvglrevolt.github.io/tree/master/towingtankResults">Results</a>
 
 Thanks to NTNU and SINTEF for helping us out with this.
 
