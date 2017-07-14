@@ -1,0 +1,325 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>filter_data_joined</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-07-14"><meta name="DC.source" content="filter_data_joined.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> [] = filter_data_joined(run_data, input_args, title_plot, boundaries)
+<span class="comment">% Used when multiple tests are performed in one time measurement.</span>
+<span class="comment">% Takes a matrix of data and plots a desired subset based on input</span>
+<span class="comment">% arguments. run_data is a nxm matrix input_args is a cell array of string</span>
+<span class="comment">% mean_arr, var_arr, max_arr and min_arr contains most data,</span>
+<span class="comment">% mean_arr_f_tot, var_arr_f_tot, max_arr_f_tot and min_arr_f_tot contains</span>
+<span class="comment">% the last of the data(f_tot = f_aft - f_bow). f_tot is manually created,</span>
+<span class="comment">% original data includes, but is not limited to, f_aft and f_bow.</span>
+
+    <span class="comment">% Values used to select the columns in run_data</span>
+    valueSet=[1 2 3 4 5 6 7 8 9 10 11 12];
+    <span class="comment">% Set of keys that identify the information</span>
+    keySet = {<span class="string">'time'</span>, <span class="string">'sinkage_fp'</span>, <span class="string">'sinkage_ap'</span>, <span class="string">'sideforce_fp'</span>, <span class="keyword">...</span>
+        <span class="string">'sideforce_ap'</span>, <span class="string">'time2'</span>, <span class="string">'rps_star'</span>, <span class="string">'rps_port'</span>, <span class="string">'rps_bow'</span>, <span class="keyword">...</span>
+        <span class="string">'force_bow'</span>, <span class="string">'force_aft'</span>, <span class="string">'speed'</span>};
+    <span class="comment">% Store the values with korresponding keys for easy access</span>
+    mapObj = containers.Map(keySet, valueSet);
+    time = run_data(:,1);
+    <span class="comment">% Cell of info used as axis label</span>
+    data_info = {<span class="string">'Time [s]'</span>, <span class="string">'Sinkage_{FP} [m]'</span>, <span class="string">'Sinkage_{AP} [m]'</span>, <span class="keyword">...</span>
+        <span class="string">'F_{sideFP}[N]'</span>, <span class="string">'F_{sideAP}[N]'</span>, <span class="string">'Time2[s]'</span>, <span class="keyword">...</span>
+        <span class="string">'RPS_{star}[RPS]'</span>, <span class="string">'RPS_{port}'</span>, <span class="string">'RPS_{Bow}'</span> <span class="keyword">...</span>
+        <span class="string">'F_{Bow}[N]'</span>, <span class="string">'F_{Aft}[N]'</span>, <span class="string">'Vessel Velocity [m/s]'</span>};
+    <span class="comment">% Finds the desired values from map function</span>
+    active_set_index = zeros(1, length(input_args));
+    <span class="keyword">for</span> i=1:length(input_args)
+        active_set_index(i) = mapObj(input_args{i});
+    <span class="keyword">end</span>
+    <span class="comment">% Sorts in ascending order</span>
+    active_set_index = sort(active_set_index);
+    num_of_subplots = length(active_set_index)-1;
+
+    <span class="comment">% Plots the data</span>
+    figure
+    condition = 1;
+    output_args = zeros(length(run_data), length(input_args)-1);
+    f_tot=0;
+    <span class="comment">% creates f_tot if f_aft and f_bow is selected in display_data</span>
+    <span class="keyword">if</span> any(active_set_index==10) &amp;&amp; any(active_set_index==11)
+       num_of_subplots = num_of_subplots + 1;
+       f_tot = run_data(:, 11) - run_data(:, 10);
+    <span class="keyword">end</span>
+
+    <span class="keyword">for</span> i=1:num_of_subplots
+        subplot(num_of_subplots, 5, 5*(i-1)+1:5*(i-1)+5)
+        <span class="comment">% For all plots in display data</span>
+        <span class="keyword">if</span> i &lt; num_of_subplots
+
+            plot(time, run_data(:, active_set_index(i+1)));hold <span class="string">on</span>
+            mean_arr=zeros(1,length(boundaries));
+            var_arr=zeros(1,length(boundaries));
+            max_arr=zeros(1,length(boundaries));
+            min_arr=zeros(1,length(boundaries));
+            <span class="keyword">for</span> j=1:length(boundaries)
+                current_data = run_data(boundaries{j}(1):boundaries{j}(2), active_set_index(i+1));
+                plot(time(boundaries{j}(1):boundaries{j}(2)), current_data, <span class="string">'r'</span>);
+                mean_arr(1,j)= mean(current_data);
+                var_arr(1,j)= var(current_data);
+                max_arr(1,j)= max(current_data);
+                min_arr(1,j)= min(current_data);
+            <span class="keyword">end</span>
+            hold <span class="string">off</span>;
+            output_args(:,i) = run_data(:, active_set_index(i+1));
+            ylabh = get(gca,<span class="string">'YLabel'</span>);
+            set(ylabh,<span class="string">'Rotation'</span>,0)
+            set(ylabh,<span class="string">'Position'</span>,get(ylabh,<span class="string">'Position'</span>) - [5 0 0])
+            ylabel(data_info(active_set_index(i+1)))
+            xlabel(<span class="string">'Time (s)'</span>)
+            grid <span class="string">on</span>
+            <span class="keyword">if</span> condition
+                title(title_plot);
+                condition=0;
+            <span class="keyword">end</span>
+<span class="comment">%             subplot(num_of_subplots,5,5*i)</span>
+            <span class="keyword">for</span> k=1:length(mean_arr);
+                txt_format{1,k}=<span class="string">'%f '</span>;
+            <span class="keyword">end</span>
+
+            txt_mean = [<span class="string">'Mean:      '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+            txt_var =  [<span class="string">'Variance:  '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+            txt_max =  [<span class="string">'Max:       '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+            txt_min =  [<span class="string">'Min:       '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+
+            string_total = sprintf(<span class="keyword">...</span>
+                [txt_mean txt_var txt_max txt_min], mean_arr, var_arr, max_arr, min_arr);
+
+            disp(strjoin(data_info(active_set_index(i+1))));
+            disp(string_total)
+        <span class="comment">% force total is not in tests, but created from f_aft-f_bow</span>
+        <span class="comment">% this exectutes in last iteration of for loop always.</span>
+        <span class="keyword">elseif</span> f_tot ~= 0
+            plot(time, f_tot);hold <span class="string">on</span>
+            output_args(:, num_of_subplots) = f_tot;
+            ylabh = get(gca,<span class="string">'YLabel'</span>);
+            set(ylabh,<span class="string">'Rotation'</span>,0)
+            set(ylabh,<span class="string">'Position'</span>,get(ylabh,<span class="string">'Position'</span>) - [5 0 0])
+            ylabel(<span class="string">'F_{tot}[N]'</span>);
+            xlabel(<span class="string">'Time(s)'</span>);
+            grid <span class="string">on</span>;
+            txt_mean = [<span class="string">'Means:         '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+            txt_var =  [<span class="string">'Variances:     '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+            txt_max =  [<span class="string">'Maxes:         '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+            txt_min =  [<span class="string">'Minima:        '</span> strjoin(txt_format) <span class="string">'\n'</span>];
+
+            <span class="keyword">for</span> g=1:length(boundaries)
+                current_data=f_tot(boundaries{g}(1):<span class="keyword">...</span>
+                    boundaries{g}(2));
+                plot(time(boundaries{g}(1):boundaries{g}(2)), current_data, <span class="string">'r'</span>);
+                mean_arr_f_tot(1,g)= mean(current_data);
+                var_arr_f_tot(1,g)= var(current_data);
+                max_arr_f_tot(1,g)= max(current_data);
+                min_arr_f_tot(1,g)= min(current_data);
+            <span class="keyword">end</span>
+            hold <span class="string">off</span>;
+            string_total = sprintf(<span class="keyword">...</span>
+                [txt_mean txt_var txt_max txt_min], mean_arr_f_tot, var_arr_f_tot, max_arr_f_tot, min_arr_f_tot);
+            disp(<span class="string">'F_tot [N] F_aft-F_bow'</span>);
+            disp(string_total)
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in filter_data_joined (line 18)
+    time = run_data(:,1);
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [] = filter_data_joined(run_data, input_args, title_plot, boundaries)
+% Used when multiple tests are performed in one time measurement.
+% Takes a matrix of data and plots a desired subset based on input
+% arguments. run_data is a nxm matrix input_args is a cell array of string
+% mean_arr, var_arr, max_arr and min_arr contains most data,
+% mean_arr_f_tot, var_arr_f_tot, max_arr_f_tot and min_arr_f_tot contains
+% the last of the data(f_tot = f_aft - f_bow). f_tot is manually created,
+% original data includes, but is not limited to, f_aft and f_bow.
+
+    % Values used to select the columns in run_data
+    valueSet=[1 2 3 4 5 6 7 8 9 10 11 12];
+    % Set of keys that identify the information
+    keySet = {'time', 'sinkage_fp', 'sinkage_ap', 'sideforce_fp', ...
+        'sideforce_ap', 'time2', 'rps_star', 'rps_port', 'rps_bow', ...
+        'force_bow', 'force_aft', 'speed'};
+    % Store the values with korresponding keys for easy access
+    mapObj = containers.Map(keySet, valueSet);
+    time = run_data(:,1);
+    % Cell of info used as axis label
+    data_info = {'Time [s]', 'Sinkage_{FP} [m]', 'Sinkage_{AP} [m]', ...
+        'F_{sideFP}[N]', 'F_{sideAP}[N]', 'Time2[s]', ...
+        'RPS_{star}[RPS]', 'RPS_{port}', 'RPS_{Bow}' ...
+        'F_{Bow}[N]', 'F_{Aft}[N]', 'Vessel Velocity [m/s]'};
+    % Finds the desired values from map function
+    active_set_index = zeros(1, length(input_args));
+    for i=1:length(input_args)
+        active_set_index(i) = mapObj(input_args{i});
+    end
+    % Sorts in ascending order
+    active_set_index = sort(active_set_index);
+    num_of_subplots = length(active_set_index)-1;
+    
+    % Plots the data
+    figure
+    condition = 1;
+    output_args = zeros(length(run_data), length(input_args)-1);
+    f_tot=0;
+    % creates f_tot if f_aft and f_bow is selected in display_data
+    if any(active_set_index==10) && any(active_set_index==11)
+       num_of_subplots = num_of_subplots + 1;
+       f_tot = run_data(:, 11) - run_data(:, 10);
+    end
+    
+    for i=1:num_of_subplots
+        subplot(num_of_subplots, 5, 5*(i-1)+1:5*(i-1)+5)
+        % For all plots in display data
+        if i < num_of_subplots
+            
+            plot(time, run_data(:, active_set_index(i+1)));hold on
+            mean_arr=zeros(1,length(boundaries));
+            var_arr=zeros(1,length(boundaries));
+            max_arr=zeros(1,length(boundaries));
+            min_arr=zeros(1,length(boundaries));
+            for j=1:length(boundaries)
+                current_data = run_data(boundaries{j}(1):boundaries{j}(2), active_set_index(i+1));
+                plot(time(boundaries{j}(1):boundaries{j}(2)), current_data, 'r');
+                mean_arr(1,j)= mean(current_data);
+                var_arr(1,j)= var(current_data);
+                max_arr(1,j)= max(current_data);
+                min_arr(1,j)= min(current_data);
+            end
+            hold off;
+            output_args(:,i) = run_data(:, active_set_index(i+1));
+            ylabh = get(gca,'YLabel');
+            set(ylabh,'Rotation',0)
+            set(ylabh,'Position',get(ylabh,'Position') - [5 0 0])
+            ylabel(data_info(active_set_index(i+1)))
+            xlabel('Time (s)')
+            grid on
+            if condition
+                title(title_plot);
+                condition=0; 
+            end
+%             subplot(num_of_subplots,5,5*i)
+            for k=1:length(mean_arr);
+                txt_format{1,k}='%f ';
+            end
+            
+            txt_mean = ['Mean:      ' strjoin(txt_format) '\n'];
+            txt_var =  ['Variance:  ' strjoin(txt_format) '\n'];
+            txt_max =  ['Max:       ' strjoin(txt_format) '\n'];
+            txt_min =  ['Min:       ' strjoin(txt_format) '\n'];
+
+            string_total = sprintf(...
+                [txt_mean txt_var txt_max txt_min], mean_arr, var_arr, max_arr, min_arr);
+            
+            disp(strjoin(data_info(active_set_index(i+1))));
+            disp(string_total)
+        % force total is not in tests, but created from f_aft-f_bow
+        % this exectutes in last iteration of for loop always.
+        elseif f_tot ~= 0
+            plot(time, f_tot);hold on
+            output_args(:, num_of_subplots) = f_tot;
+            ylabh = get(gca,'YLabel');
+            set(ylabh,'Rotation',0)
+            set(ylabh,'Position',get(ylabh,'Position') - [5 0 0])
+            ylabel('F_{tot}[N]');
+            xlabel('Time(s)');
+            grid on;
+            txt_mean = ['Means:         ' strjoin(txt_format) '\n'];
+            txt_var =  ['Variances:     ' strjoin(txt_format) '\n'];
+            txt_max =  ['Maxes:         ' strjoin(txt_format) '\n'];
+            txt_min =  ['Minima:        ' strjoin(txt_format) '\n'];
+            
+            for g=1:length(boundaries)
+                current_data=f_tot(boundaries{g}(1):...
+                    boundaries{g}(2));
+                plot(time(boundaries{g}(1):boundaries{g}(2)), current_data, 'r');
+                mean_arr_f_tot(1,g)= mean(current_data);
+                var_arr_f_tot(1,g)= var(current_data);
+                max_arr_f_tot(1,g)= max(current_data);
+                min_arr_f_tot(1,g)= min(current_data);
+            end
+            hold off;
+            string_total = sprintf(...
+                [txt_mean txt_var txt_max txt_min], mean_arr_f_tot, var_arr_f_tot, max_arr_f_tot, min_arr_f_tot);
+            disp('F_tot [N] F_aft-F_bow');
+            disp(string_total)
+
+        end
+    end
+    
+    
+end
+
+##### SOURCE END #####
+--></body></html>
