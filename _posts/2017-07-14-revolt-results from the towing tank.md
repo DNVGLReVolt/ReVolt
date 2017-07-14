@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ReVolt
-subtitle: Video from the Towing Tank test
+subtitle: Results from towing tank
 bigimg: /img/ReVoltTowingTank.png
 tags: [ReVolt, NTNU, SINTEF, student work, coefficients]
 avatar: /img/ReVoltSquare.png
